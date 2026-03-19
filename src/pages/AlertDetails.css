@@ -1,0 +1,277 @@
+.alert-details-page {
+  background-color: #f1f5f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-header {
+  height: 64px;
+  background: white;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.back-arrow {
+  font-size: 28px;
+  color: #1a202c;
+  line-height: 1;
+}
+
+.details-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+.details-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  padding-bottom: 180px; /* Space for fixed footer */
+}
+
+/* Warning Banner */
+.warning-banner {
+  background: #fffff0;
+  border: 1px solid #fff3bf;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.warning-icon-wrapper {
+  width: 50px;
+  height: 50px;
+  background: #fff3bf;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.warning-icon {
+  font-size: 24px;
+}
+
+.alert-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #744210;
+  margin-bottom: 8px;
+}
+
+.patient-context {
+  font-size: 14px;
+  color: #975a16;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.time-context {
+  font-size: 12px;
+  color: #b7791f;
+  font-weight: 500;
+}
+
+/* Secondary Cards */
+.secondary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  border: 1px solid #eef2f6;
+}
+
+.secondary-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 20px;
+}
+
+.context-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.context-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #718096;
+}
+
+.context-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.context-value.red-text {
+  color: #c53030;
+  font-size: 16px;
+}
+
+.threshold-bar-wrapper {
+  margin-top: 20px;
+}
+
+.threshold-bar-bg {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.threshold-bar-fill.red {
+  height: 100%;
+  background: #f56565;
+}
+
+/* AI Analysis Card */
+.ai-analysis-card.purple-theme {
+  border: 1px solid #e9d8fd;
+}
+
+.ai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-header-left h3 {
+  margin: 0;
+  color: #44337a;
+}
+
+.ai-version-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b46c1;
+  background: #faf5ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.confidence-area {
+  margin-bottom: 24px;
+}
+
+.confidence-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #553c9a;
+  margin-bottom: 8px;
+}
+
+.confidence-bar-bg {
+  height: 6px;
+  background: #faf5ff;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-bar-fill.purple {
+  height: 100%;
+  background: #805ad5;
+}
+
+.probable-cause-area {
+  background: #faf5ff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.probable-cause-area h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #44337a;
+  margin-bottom: 8px;
+}
+
+.probable-cause-area p {
+  font-size: 13px;
+  color: #6b46c1;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.suggested-actions-area h4 {
+  font-size: 11px;
+  font-weight: 800;
+  color: #44337a;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.suggested-actions-area ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.suggested-actions-area li {
+  font-size: 13px;
+  color: #6b46c1;
+  margin-bottom: 8px;
+}
+
+.view-full-ai-btn {
+  background: transparent;
+  border: none;
+  color: #805ad5;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* Action Buttons Alignment */
+.details-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-solid-blue {
+  background: #0066cc;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-outline-blue {
+  background: white;
+  color: #0066cc;
+  border: 1.5px solid #0066cc;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}

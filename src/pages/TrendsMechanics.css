@@ -1,0 +1,91 @@
+.trends-mechanics-container {
+  padding: 24px;
+  background-color: #f4f7f9;
+  min-height: 100vh;
+}
+
+.trends-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.trends-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a3353;
+  margin: 0;
+}
+
+.back-btn-minimal {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #1a3353;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.chart-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a3353;
+  margin-bottom: 20px;
+}
+
+.svg-chart {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.grid-line {
+  stroke: #e0e6ed;
+  stroke-dasharray: 4;
+}
+
+.axis-line {
+  stroke: #90a4ae;
+  stroke-width: 1;
+}
+
+.line-path {
+  fill: none;
+  stroke: #10b981;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.data-point {
+  fill: white;
+  stroke: #10b981;
+  stroke-width: 2;
+}
+
+.bar-rect {
+  fill: #f59e0b;
+  rx: 4;
+}
+
+.axis-label {
+  fill: #90a4ae;
+  font-size: 14px;
+  font-weight: 600;
+}

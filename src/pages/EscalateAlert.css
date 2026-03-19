@@ -1,0 +1,135 @@
+.escalate-alert-page {
+  background-color: #f1f5f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.escalate-content {
+  flex: 1;
+  padding: 16px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.escalation-status-bar {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  padding: 16px;
+  border-radius: 12px;
+  color: #c53030;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.professionals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pro-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.pro-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pro-avatar {
+  width: 44px;
+  height: 44px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  font-size: 20px;
+}
+
+.pro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pro-role {
+  font-size: 11px;
+  font-weight: 800;
+  color: #a0aec0;
+  letter-spacing: 0.5px;
+}
+
+.pro-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+.pro-status {
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pro-status.green { color: #38a169; }
+.pro-status.orange { color: #dd6b20; }
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.green .status-dot { background: #38a169; }
+.orange .status-dot { background: #dd6b20; }
+
+.pro-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.pro-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.pro-action-btn.chat {
+  color: #3182ce;
+  border-color: #bee3f8;
+}
+
+.pro-action-btn.call {
+  color: #38a169;
+  border-color: #c6f6d5;
+}
+
+.pro-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

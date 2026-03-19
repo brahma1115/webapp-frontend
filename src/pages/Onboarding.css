@@ -1,0 +1,87 @@
+.onboarding-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at bottom left, #e8eaf6, #f3e5f5);
+  padding: 20px;
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.skip-link {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logo-placeholder, .illustration-placeholder {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.logo-section h1, .content-section h2 {
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.description {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.action-section, .footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-prompt {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.login-prompt .link {
+  color: var(--primary-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.dot.active {
+  background: var(--primary-color);
+  width: 24px;
+  border-radius: 5px;
+}
