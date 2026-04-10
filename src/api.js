@@ -8,27 +8,37 @@ const apiRequest = async (endpoint, options = {}) => {
     ...options.headers,
   };
 
-  if (token) {
+  // Only add Authorization header if token exists and skipToken is not true
+  if (token && !options.skipToken) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || errorData.message || 'Something went wrong');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error(`API Error [${endpoint}]:`, errorData);
+      throw new Error(errorData.error || errorData.detail || errorData.message || 'Something went wrong');
+    }
+
+    const data = await response.json();
+    console.log(`API Success [${endpoint}]:`, data);
+    return data;
+  } catch (error) {
+    console.error(`Fetch Error [${endpoint}]:`, error);
+    throw error;
   }
-
-  return response.json();
 };
 
 export const login = (email, password) => {
   return apiRequest('/api/login/', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
+    skipToken: true, // Don't send old tokens during login
   });
 };
 
@@ -43,6 +53,7 @@ export const register = (userData) => {
       phone: userData.phone,
       role: userData.role || 'doctor' // Default to doctor if not specified
     }),
+    skipToken: true, // Don't send old tokens during registration
   });
 };
 
@@ -78,6 +89,24 @@ export const deactivateUser = (userId) => {
   });
 };
 
+export const deleteUser = (userId) => {
+  return apiRequest(`/api/user-management/${userId}/delete_user/`, {
+    method: 'DELETE'
+  });
+};
+
+export const makeAdmin = (userId) => {
+  return apiRequest(`/api/user-management/${userId}/make_admin/`, {
+    method: 'POST'
+  });
+};
+
+export const dismissAdmin = (userId) => {
+  return apiRequest(`/api/user-management/${userId}/dismiss_admin/`, {
+    method: 'POST'
+  });
+};
+
 // Patient Endpoints
 export const getPatients = (statusFilter = 'All') => {
   const query = statusFilter !== 'All' ? `?status_filter=${statusFilter}` : '';
@@ -96,13 +125,24 @@ export const createPatient = (patientData) => {
       primary_diagnosis: patientData.diagnosis,
       admission_date: patientData.admissionDate,
       bed_number: patientData.bed,
-      attending_physician: patientData.physician
+      attending_physician: patientData.physician,
+      status: patientData.status || 'Stable'
     }),
   });
 };
 
 export const getPatientDetails = (id) => {
   return apiRequest(`/api/patients/${id}/profile/`);
+};
+
+export const deletePatient = (id) => {
+  return apiRequest(`/api/patients/${id}/`, {
+    method: 'DELETE'
+  });
+};
+
+export const getAIPredictions = () => {
+  return apiRequest('/api/ai/predictions/');
 };
 
 export const updateProfile = (profileData) => {

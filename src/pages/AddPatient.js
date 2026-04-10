@@ -15,7 +15,8 @@ const AddPatient = () => {
     diagnosis: '',
     admissionDate: '',
     bed: '',
-    physician: 'Dr. Sarah Wilson'
+    physician: 'Dr. Sarah Wilson',
+    status: 'Stable'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -168,13 +169,23 @@ const AddPatient = () => {
               </div>
             </div>
 
-            <div className="form-field full-width">
-              <label>Attending Physician</label>
-              <select name="physician" value={formData.physician} onChange={handleChange}>
-                <option value="Dr. Sarah Wilson">Dr. Sarah Wilson</option>
-                <option value="Dr. Rajesh Gupta">Dr. Rajesh Gupta</option>
-                <option value="Dr. Priya Sharma">Dr. Priya Sharma</option>
-              </select>
+            <div className="form-grid-2">
+              <div className="form-field">
+                <label>Attending Physician</label>
+                <select name="physician" value={formData.physician} onChange={handleChange}>
+                  <option value="Dr. Sarah Wilson">Dr. Sarah Wilson</option>
+                  <option value="Dr. Rajesh Gupta">Dr. Rajesh Gupta</option>
+                  <option value="Dr. Priya Sharma">Dr. Priya Sharma</option>
+                </select>
+              </div>
+              <div className="form-field">
+                <label>Patient Status</label>
+                <select name="status" value={formData.status} onChange={handleChange}>
+                  <option value="Stable">Stable (Green)</option>
+                  <option value="Critical">Critical (Red)</option>
+                  <option value="Warning">Warning (Yellow)</option>
+                </select>
+              </div>
             </div>
           </div>
 

@@ -65,6 +65,32 @@ const Settings = () => {
           <span>↪️</span> Log Out
         </button>
 
+        {userRole !== 'Administrator' && (
+          <button 
+            className="logout-btn-premium" 
+            style={{backgroundColor: '#fee2e2', color: '#dc2626', marginTop: '12px'}}
+            onClick={() => {
+              if(window.confirm("Are you sure you want to permanently delete your account? This cannot be undone.")) {
+                fetch('https://fdcbbgdj-8000.inc1.devtunnels.ms/api/login/delete_account/', {
+                  method: 'DELETE',
+                  headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                  }
+                }).then(res => {
+                  if(res.ok) {
+                    alert("Account deleted successfully.");
+                    handleLogout();
+                  } else {
+                    alert("Failed to delete account.");
+                  }
+                }).catch(err => alert("Error deleting account: " + err.message));
+              }
+            }}
+          >
+            <span>🗑️</span> Delete Account
+          </button>
+        )}
+
         <footer className="settings-footer">
           <p>VentGuard Pro v2.4.1</p>
         </footer>

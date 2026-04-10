@@ -25,6 +25,11 @@ const Signup = () => {
       return;
     }
 
+    if (!formData.email.toLowerCase().endsWith('@gmail.com')) {
+      setError('Please use a valid @gmail.com address');
+      return;
+    }
+
     setLoading(true);
     try {
       const data = await register(formData);

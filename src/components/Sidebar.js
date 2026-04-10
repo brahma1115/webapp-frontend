@@ -13,7 +13,7 @@ const Sidebar = () => {
         { name: 'Dashboard', icon: '🏠', path: '/dashboard' },
         { name: 'Live Monitor', icon: '📈', path: '/icu-monitoring' },
         { name: 'ICU Monitoring', icon: '🫁', path: '/monitor' },
-        { name: 'Analytics', icon: '📊', path: '/analytics' },
+
       ]
     },
     {

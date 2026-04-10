@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUsers, approveUser, deactivateUser } from '../api';
+import { getUsers, approveUser, deactivateUser, deleteUser, makeAdmin, dismissAdmin } from '../api';
 import './UserManagement.css';
 
 const UserManagement = () => {
@@ -7,11 +7,18 @@ const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const currentUserId = parseInt(localStorage.getItem('user_id'));
 
   const tabs = ['All', 'Doctors', 'Nurses', 'RTs', 'Admins'];
 
   useEffect(() => {
     fetchUsers();
+
+    const intervalId = setInterval(() => {
+      fetchUsers();
+    }, 15000);
+
+    return () => clearInterval(intervalId);
   }, [activeTab]);
 
   const fetchUsers = async () => {
@@ -30,7 +37,7 @@ const UserManagement = () => {
     try {
       await approveUser(userId);
       fetchUsers(); // Refresh list
-      alert('User approved successfully!');
+      alert('Approved! This account has been successfully approved, Mawa.');
     } catch (err) {
       alert('Failed to approve user: ' + err.message);
     }
@@ -47,6 +54,40 @@ const UserManagement = () => {
       }
     }
   };
+  
+  const handleMakeAdmin = async (userId) => {
+    try {
+      await makeAdmin(userId);
+      fetchUsers();
+      alert('User promoted to Admin successfully!');
+    } catch (err) {
+      alert('Failed to promote user: ' + err.message);
+    }
+  };
+
+  const handleDismissAdmin = async (userId) => {
+    if (window.confirm('Are you sure you want to dismiss this user as Admin? Their role will be changed back to Doctor.')) {
+      try {
+        await dismissAdmin(userId);
+        fetchUsers();
+        alert('User dismissed as Admin successfully!');
+      } catch (err) {
+        alert('Failed to dismiss admin: ' + err.message);
+      }
+    }
+  };
+
+  const handleDelete = async (userId) => {
+    if (window.confirm('Are you sure you want to permanently delete this user? This action cannot be undone.')) {
+      try {
+        await deleteUser(userId);
+        fetchUsers();
+        alert('User deleted successfully!');
+      } catch (err) {
+        alert('Failed to delete user: ' + err.message);
+      }
+    }
+  };
 
   const filteredUsers = users.filter(user => 
     user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,7 +95,9 @@ const UserManagement = () => {
   );
 
   const getStatusClass = (status) => {
-    return status.toLowerCase() === 'active' ? 'status-active' : 'status-pending';
+    const s = status.toLowerCase();
+    if (s === 'approved' || s === 'active') return 'status-active';
+    return 'status-pending';
   };
 
   return (
@@ -106,12 +149,23 @@ const UserManagement = () => {
                     Approve
                   </button>
                 )}
-                {user.status === 'Active' && (
+                {(user.status === 'Approved' || user.status === 'Active') && (
                   <button className="deactivate-btn" onClick={() => handleDeactivate(user.id)}>
                     Deactivate
                   </button>
                 )}
+                {user.role !== 'adminastrator' && user.status === 'Approved' && (
+                  <button className="make-admin-btn" onClick={() => handleMakeAdmin(user.id)} title="Make Admin">
+                    👑
+                  </button>
+                )}
+                {user.role === 'adminastrator' && user.id !== currentUserId && (
+                  <button className="dismiss-admin-btn" onClick={() => handleDismissAdmin(user.id)} title="Dismiss Admin">
+                    🚫
+                  </button>
+                )}
                 <button className="edit-btn">✏️</button>
+                <button className="delete-btn" onClick={() => handleDelete(user.id)} title="Delete User">🗑️</button>
               </div>
             </div>
           ))

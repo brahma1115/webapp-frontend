@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Pages
@@ -58,6 +58,39 @@ import MainLayout from './components/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  if (isOffline) {
+    return (
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+        backgroundColor: '#FFFFFF', zIndex: 9999, 
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+      }}>
+        <svg fill="none" stroke="#F43F5E" strokeWidth="2" viewBox="0 0 24 24" style={{width: '120px', height: '120px', marginBottom: '24px'}}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <h1 style={{fontSize: '24px', fontWeight: 'bold', color: '#111827', marginBottom: '16px'}}>No Internet Connection</h1>
+        <p style={{fontSize: '16px', color: '#6B7280', textAlign: 'center', maxWidth: '400px', lineHeight: '1.5'}}>
+          Please check your Wi-Fi or network connection to continue using the application.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Router>
       <div className="App">

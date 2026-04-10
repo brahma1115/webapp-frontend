@@ -145,12 +145,12 @@
 
 .severity-pill.critical { background: #fee2e2; color: #ef4444; }
 .severity-pill.warning { background: #fef3c7; color: #f59e0b; }
-.severity-pill.normal { background: #dcfce7; color: #10b981; }
+.severity-pill.normal, .severity-pill.stable { background: #dcfce7; color: #10b981; }
 
 .severity-dot { width: 6px; height: 6px; border-radius: 50%; }
 .severity-pill.critical .severity-dot { background: #ef4444; }
 .severity-pill.warning .severity-dot { background: #f59e0b; }
-.severity-pill.normal .severity-dot { background: #10b981; }
+.severity-pill.normal .severity-dot, .severity-pill.stable .severity-dot { background: #10b981; }
 
 /* Patient Profile / Details Styles */
 .patient-profile-page {
@@ -706,6 +706,108 @@
   background: #f0f7ff;
 }
 
-.profile-action-item {
-  text-decoration: none;
+
+.patient-card.clickable {
+  cursor: pointer;
+  padding: 16px;
+}
+
+.patient-card-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.patient-icon-container {
+  flex-shrink: 0;
+}
+
+.patient-icon-circle {
+  width: 48px;
+  height: 48px;
+  background: #f0f4f8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.patient-info-content {
+  flex: 1;
+}
+
+.patient-card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.name-id-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.patient-name-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 2px 0;
+}
+
+.patient-id-text {
+  font-size: 13px;
+  color: #757575;
+  margin: 0;
+  font-weight: 500;
+}
+
+.patient-bed-text {
+  font-size: 13px;
+  color: #757575;
+  margin: 2px 0 0 0;
+  font-weight: 600;
+}
+
+.status-condition-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.status-pill-android {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.status-pill-android.critical {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.status-pill-android.warning {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-pill-android.normal, .status-pill-android.stable {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-pill-android .dot {
+  font-size: 10px;
+}
+
+.condition-text-android {
+  font-size: 13px;
+  color: #455a64;
+  margin: 0;
+  font-weight: 600;
 }

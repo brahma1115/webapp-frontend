@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { getStatus } from '../clinicalLogic';
 import './MonitorBed.css';
 
 const MonitorBed = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { patient } = location.state || { 
-    patient: { name: 'Unknown', bed: 'ICU-??', tv: '450', rr: '18', fio2: '40%', spo2: '98%', status: 'Normal' } 
+    patient: { name: 'Unknown', bed: 'ICU-??', ppeak: '24', peep: '5.0', tv: '450', rr: '18', fio2: '40', ie: '1:2.0' } 
   };
 
   const Waveform = ({ color, label }) => (
@@ -25,12 +26,17 @@ const MonitorBed = () => {
     </div>
   );
 
+  const ppeakStatus = getStatus('PIP', patient.ppeak || '24');
+  const peepStatus = getStatus('PEEP', patient.peep || '5.0');
+  const rrStatus = getStatus('RR', patient.rr || '18');
+  const fio2Status = getStatus('FIO2', (patient.fio2 || '40').replace('%', ''));
+
   return (
     <div className="monitor-bed-container">
       <header className="monitor-bed-header">
         <div className="header-left">
           <button className="back-btn-minimal" onClick={() => navigate('/icu-monitoring')}>←</button>
-          <h1>Monitor: Bed {patient.bed.replace('Bed ', '')}</h1>
+          <h1>Monitor: {patient.bed ? `Bed ${patient.bed.replace('Bed ', '')}` : 'Unknown Bed'}</h1>
         </div>
         <div className="header-actions">
           <div className="search-mini">
@@ -55,54 +61,66 @@ const MonitorBed = () => {
 
       <div className="monitor-main-layout">
         <div className="waveforms-section">
-          <Waveform color="#ffd600" label="Paw (cmH2O)" />
-          <Waveform color="#00e5ff" label="Flow (L/min)" />
+          {patient.is_connected ? (
+            <>
+              <Waveform color="#ffd600" label="Paw (cmH2O)" />
+              <Waveform color="#00e5ff" label="Flow (L/min)" />
+            </>
+          ) : (
+            <div className="waveforms-placeholder">
+              <p>Connect to Ventilator to see live waveforms</p>
+            </div>
+          )}
         </div>
 
         <div className="vitals-grid-right">
           <div 
-            className="vital-card-detailed yellow" 
+            className="vital-card-detailed" 
             onClick={() => navigate('/trends-mechanics')}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', borderColor: ppeakStatus.color }}
           >
             <label>PPEAK</label>
             <div className="value-box">
-              <span className="vital-value-large">24</span>
+              <span className="vital-value-large" style={{ color: ppeakStatus.color }}>{patient.ppeak || '24'}</span>
               <span className="vital-unit-small">cmH2O</span>
             </div>
+            {ppeakStatus.level !== 'NORMAL' && <div className="status-label-small" style={{ background: ppeakStatus.color }}>{ppeakStatus.label}</div>}
           </div>
-          <div className="vital-card-detailed blue">
+          <div className="vital-card-detailed" style={{ borderColor: peepStatus.color }}>
             <label>PEEP</label>
             <div className="value-box">
-              <span className="vital-value-large">{patient.peep || '5.0'}</span>
+              <span className="vital-value-large" style={{ color: peepStatus.color }}>{patient.peep || '5.0'}</span>
               <span className="vital-unit-small">cmH2O</span>
             </div>
+            {peepStatus.level !== 'NORMAL' && <div className="status-label-small" style={{ background: peepStatus.color }}>{peepStatus.label}</div>}
           </div>
           <div className="vital-card-detailed green">
             <label>VTE</label>
             <div className="value-box">
-              <span className="vital-value-large">{patient.tv}</span>
+              <span className="vital-value-large">{patient.tv || '450'}</span>
               <span className="vital-unit-small">mL</span>
             </div>
           </div>
-          <div className="vital-card-detailed purple">
+          <div className="vital-card-detailed" style={{ borderColor: rrStatus.color }}>
             <label>RR</label>
             <div className="value-box">
-              <span className="vital-value-large">{patient.rr}</span>
+              <span className="vital-value-large" style={{ color: rrStatus.color }}>{patient.rr || '18'}</span>
               <span className="vital-unit-small">bpm</span>
             </div>
+            {rrStatus.level !== 'NORMAL' && <div className="status-label-small" style={{ background: rrStatus.color }}>{rrStatus.label}</div>}
           </div>
-          <div className="vital-card-detailed">
+          <div className="vital-card-detailed" style={{ borderColor: fio2Status.color }}>
             <label>FIO2</label>
             <div className="value-box">
-              <span className="vital-value-large">{patient.fio2}</span>
+              <span className="vital-value-large" style={{ color: fio2Status.color }}>{(patient.fio2 || '40').replace('%', '')}</span>
               <span className="vital-unit-small">%</span>
             </div>
+            {fio2Status.level !== 'NORMAL' && <div className="status-label-small" style={{ background: fio2Status.color }}>{fio2Status.label}</div>}
           </div>
           <div className="vital-card-detailed">
             <label>I:E</label>
             <div className="value-box">
-              <span className="vital-value-large">1:2.0</span>
+              <span className="vital-value-large">{patient.ie || '1:2.0'}</span>
             </div>
           </div>
         </div>

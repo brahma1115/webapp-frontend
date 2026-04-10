@@ -1,48 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAIPredictions } from '../api';
 import './PredictiveAnalytics.css';
 
 const PredictiveAnalytics = () => {
   const navigate = useNavigate();
+  const [predictions, setPredictions] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
-  const predictions = [
-    { 
-      id: 1, 
-      type: 'High Peak Pressure', 
-      patient: 'Rajesh Kumar', 
-      bed: 'Bed ICU-01', 
-      time: 'in 2 hours', 
-      conf: '87%', 
-      recommendation: 'Check for secretion buildup' 
-    },
-    { 
-      id: 2, 
-      type: 'Desaturation < 90%', 
-      patient: 'Priya Sharma', 
-      bed: 'Bed ICU-02', 
-      time: 'in 4 hours', 
-      conf: '72%', 
-      recommendation: 'Consider increasing FiO2' 
-    },
-    { 
-      id: 3, 
-      type: 'Rapid Shallow Breathing', 
-      patient: 'Arjun Deshmukh', 
-      bed: 'Bed ICU-03', 
-      time: 'in 6 hours', 
-      conf: '65%', 
-      recommendation: 'Assess for weaning readiness' 
-    },
-    { 
-      id: 4, 
-      type: 'Low Tidal Volume', 
-      patient: 'Ananya Rao', 
-      bed: 'Bed ICU-04', 
-      time: 'in 8 hours', 
-      conf: '58%', 
-      recommendation: 'Check for leaks in circuit' 
-    }
-  ];
+  React.useEffect(() => {
+    const fetchPredictions = async () => {
+      try {
+        const data = await getAIPredictions();
+        setPredictions(data);
+      } catch (err) {
+        console.error('Failed to fetch AI predictions:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPredictions();
+  }, []);
 
   return (
     <div className="predictive-container">
@@ -64,7 +42,7 @@ const PredictiveAnalytics = () => {
             <span className="brain-icon">🧠</span>
             <h2>Forecast Overview</h2>
           </div>
-          <p className="overview-sub">AI predicts 3 potential critical events in the next 6 hours based on current patient trends.</p>
+          <p className="overview-sub">AI predicts {predictions.length} potential critical events in the next 6 hours based on current patient trends.</p>
           
           <div className="overview-metrics">
             <div className="metric-box">
@@ -72,7 +50,7 @@ const PredictiveAnalytics = () => {
               <span className="metric-label">MAX CONFIDENCE</span>
             </div>
             <div className="metric-box">
-              <span className="metric-val">3</span>
+              <span className="metric-val">{predictions.length}</span>
               <span className="metric-label">PREDICTED EVENTS</span>
             </div>
           </div>
@@ -121,45 +99,50 @@ const PredictiveAnalytics = () => {
           <div className="predicted-events-card">
             <h3>Predicted Events</h3>
             <div className="events-list">
-              {predictions.map(pred => (
+              {loading ? (
+                <div className="loading">Loading AI Predictions...</div>
+              ) : predictions.length > 0 ? (
+                predictions.map(pred => (
                   <div 
+                    key={pred.id}
                     className="prediction-item" 
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       // Create a patient object to pass to details
                       const patientObj = {
-                        name: pred.patient,
-                        bed: pred.bed,
-                        status: 'Normal', // Default or could be based on prediction
-                        diagnosis: pred.type,
-                        initials: pred.patient.split(' ').map(n => n[0]).join(''),
-                        physician: 'Dr. Wilson',
-                        idNum: `P0${pred.id + 10}`
+                        id: pred.patient,
+                        name: pred.patient_name,
+                        bed: pred.bed_number,
+                        status: 'Normal',
+                        idNum: `P0${pred.patient}`
                       };
                       navigate('/patient-details', { state: { patient: patientObj } });
                     }}
                   >
                   <div className="item-top">
                     <div className="item-title-group">
-                      <h4>{pred.type}</h4>
-                      <p className="item-patient">{pred.patient} • {pred.bed}</p>
+                      <h4>{pred.event_name}</h4>
+                      <p className="item-patient">{pred.patient_name} • {pred.bed_number}</p>
                     </div>
-                    <span className="time-in">in {pred.time.split(' ')[1]} {pred.time.split(' ')[2]}</span>
+                    <span className="time-in">{pred.time_to_event}</span>
                   </div>
                   
                   <div className="conf-area">
-                    <div className="conf-label">AI Confidence <span className="conf-val">{pred.conf}</span></div>
+                    <div className="conf-label">AI Confidence <span className="conf-val">{pred.confidence_score}%</span></div>
                     <div className="conf-bar-bg">
-                      <div className="conf-bar-fill" style={{ width: pred.conf }}></div>
+                      <div className="conf-bar-fill" style={{ width: `${pred.confidence_score}%` }}></div>
                     </div>
                   </div>
 
                   <div className="recommendation-bar">
-                    <span className="rec-icon">⚠️</span>
+                    <span className="rec-icon">💡</span>
                     <p>Recommendation: {pred.recommendation}</p>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="no-users">No predictive events detected currently.</div>
+            )}
             </div>
           </div>
         </div>

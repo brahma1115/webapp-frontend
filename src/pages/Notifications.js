@@ -45,7 +45,7 @@ const Notifications = () => {
   const handleApproveNotif = async (userId, notifId) => {
     try {
       await approveUser(userId);
-      alert('User approved successfully!');
+      alert('Approved! This account has been successfully approved, mawa.');
       fetchNotifications();
     } catch (err) {
       alert('Failed to approve user: ' + err.message);

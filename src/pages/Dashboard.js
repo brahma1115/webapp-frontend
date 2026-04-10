@@ -52,7 +52,7 @@ const Dashboard = () => {
   const handleApproveNotif = async (userId, notifId) => {
     try {
       await approveUser(userId);
-      alert('User approved successfully!');
+      alert('Approved! This account has been successfully approved, mawa.');
       fetchNotifications();
     } catch (err) {
       alert('Failed to approve user: ' + err.message);
@@ -68,7 +68,7 @@ const Dashboard = () => {
     { title: 'Patients', icon: '👤', color: '#E3F2FD', textColor: '#2196F3', path: '/patients' },
     { title: 'Monitor', icon: '📈', color: '#E8F5E9', textColor: '#4CAF50', path: '/monitor' },
     { title: 'Alerts', icon: '⚠️', color: '#FFEBEE', textColor: '#F44336', path: '/alerts' },
-    { title: 'Analytics', icon: '📊', color: '#F3E5F5', textColor: '#6A1B9A', path: '/analytics' },
+
     // Only show User Management for Admins
     ...(isAdmin ? [
       { title: 'Users', icon: '👥', color: '#FFF3E0', textColor: '#FF9800', path: '/user-management' }
@@ -130,7 +130,13 @@ const Dashboard = () => {
                   ) : (
                     recentAlerts.length > 0 ? (
                       recentAlerts.slice(0, 5).map((alert, i) => (
-                        <div key={i} className="notif-item unread clinical" onClick={() => navigate('/alert-details', { state: { alert } })}>
+                        <div key={i} className="notif-item unread clinical" onClick={() => {
+                          if (alert.alert_type === 'Critical') {
+                            navigate('/critical-alert', { state: { alert } });
+                          } else {
+                            navigate('/alert-details', { state: { alert } });
+                          }
+                        }}>
                           <div className={`notif-icon clinical ${alert.alert_type.toLowerCase()}`}>
                             {alert.alert_type === 'Critical' ? '🚨' : '⚠️'}
                           </div>
@@ -227,8 +233,14 @@ const Dashboard = () => {
             </div>
             <div className="recent-alerts-list">
               {recentAlerts.length > 0 ? (
-                recentAlerts.map((alert, i) => (
-                  <div key={i} className="alert-row-item" onClick={() => navigate('/alert-details', { state: { alert } })}>
+                recentAlerts.slice(0, 4).map((alert, i) => (
+                  <div key={i} className="alert-row-item" onClick={() => {
+                    if (alert.alert_type === 'Critical') {
+                      navigate('/critical-alert', { state: { alert } });
+                    } else {
+                      navigate('/alert-details', { state: { alert } });
+                    }
+                  }}>
                     <div className="alert-type-bar" style={{ backgroundColor: alert.alert_type === 'Critical' ? '#F44336' : '#FF9800' }}></div>
                     <div className="alert-main-content">
                       <div className="alert-patient">
@@ -237,6 +249,7 @@ const Dashboard = () => {
                       </div>
                       <p className="alert-msg">{alert.description}</p>
                     </div>
+                    <div className="alert-value">{alert.current_value}</div>
                     <div className="alert-metadata">
                       <span className={`severity-badge ${alert.alert_type.toLowerCase()}`}>
                         • {alert.alert_type}

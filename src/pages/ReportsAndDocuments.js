@@ -42,7 +42,7 @@ const ReportsAndDocuments = () => {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    alert(`${report.name} has been downloaded to your PC!`);
+    alert(`${report.name} has been saved as a document in your Downloads folder!`);
   };
 
   return (

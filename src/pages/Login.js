@@ -55,12 +55,12 @@ const Login = () => {
         <form onSubmit={handleLogin} className="login-form">
           {error && <div className="error-message">{error}</div>}
           <div className="input-group">
-            <label>Email Address</label>
+            <label>Email / Phone Number</label>
             <div className="input-wrapper">
               <span className="icon">📧</span>
               <input 
-                type="email" 
-                placeholder="doctor@hospital.com" 
+                type="text" 
+                placeholder="Email or 10-digit number" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required 

@@ -27,12 +27,15 @@ const Patients = () => {
     }
   };
 
-  const filteredPatients = patients.filter(p => {
-    const name = p.name || '';
-    const bed = p.bed_number || '';
-    return name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-           bed.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const filteredPatients = Array.isArray(patients) ? patients.filter(p => {
+    if (!p) return false;
+    const name = p.full_name || p.name || '';
+    const bed = p.bed_number || p.bed || '';
+    const searchQueryLower = searchQuery.toLowerCase();
+    return name.toLowerCase().includes(searchQueryLower) || 
+           bed.toLowerCase().includes(searchQueryLower) ||
+           (p.patient_id && p.patient_id.toLowerCase().includes(searchQueryLower));
+  }) : [];
 
   return (
     <div className="patients-page">
@@ -71,39 +74,29 @@ const Patients = () => {
           <div className="error-message">{error}</div>
         ) : filteredPatients.length > 0 ? (
           filteredPatients.map(patient => (
-            <div key={patient.id} className="patient-card">
-              <div className="patient-card-header">
-                <div className="patient-info-top">
-                  <h2>{patient.name}</h2>
-                  <p>{patient.bed_number}</p>
+            <div key={patient.id} className="patient-card clickable" onClick={() => navigate('/patient-details', { state: { patient } })}>
+              <div className="patient-card-main">
+                <div className="patient-icon-container">
+                  <div className="patient-icon-circle">
+                    {patient.gender === 'Female' ? '👩' : '👨'}
+                  </div>
                 </div>
-                <div className={`severity-pill ${patient.status.toLowerCase()}`}>
-                  <span className="severity-dot"></span>
-                  {patient.status}
-                </div>
-              </div>
-
-              <div className="patient-stats">
-                <div className="stat-row">
-                  <span>Diagnosis</span>
-                  <span>{patient.condition}</span>
-                </div>
-                <div className="stat-row">
-                  <span>Age</span>
-                  <span>{patient.age}</span>
-                </div>
-                <div className="stat-row">
-                  <span>ID</span>
-                  <span>{patient.patient_id}</span>
-                </div>
-              </div>
-
-              <div className="patient-card-footer">
-                <span className="view-profile-link" onClick={() => navigate('/patient-details', { state: { patient } })}>
-                  View Profile
-                </span>
-                <div className="patient-initials-mini">
-                  {patient.name ? patient.name.split(' ').map(n => n[0]).join('').toUpperCase() : '??'}
+                
+                <div className="patient-info-content">
+                  <div className="patient-card-header-row">
+                    <div className="name-id-group">
+                      <h2 className="patient-name-text">{patient.full_name || patient.name}</h2>
+                      <p className="patient-id-text">{patient.formatted_details || `ID: ${patient.patient_id} • ${patient.age}`}</p>
+                      <p className="patient-bed-text">{patient.formatted_bed || `Bed: ${patient.bed_number}`}</p>
+                    </div>
+                    
+                    <div className="status-condition-group">
+                      <div className={`status-pill-android ${(patient.status || 'Normal').toLowerCase()}`}>
+                        <span className="dot">●</span> {patient.status || 'Normal'}
+                      </div>
+                      <p className="condition-text-android">{patient.condition || patient.diagnosis}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
