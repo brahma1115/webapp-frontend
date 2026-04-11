@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getUsers, approveUser, deactivateUser, deleteUser, makeAdmin, dismissAdmin } from '../api';
 import './UserManagement.css';
 
@@ -11,17 +11,7 @@ const UserManagement = () => {
 
   const tabs = ['All', 'Doctors', 'Nurses', 'RTs', 'Admins'];
 
-  useEffect(() => {
-    fetchUsers();
-
-    const intervalId = setInterval(() => {
-      fetchUsers();
-    }, 15000);
-
-    return () => clearInterval(intervalId);
-  }, [activeTab]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getUsers(activeTab);
@@ -31,7 +21,17 @@ const UserManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchUsers();
+
+    const intervalId = setInterval(() => {
+      fetchUsers();
+    }, 15000);
+
+    return () => clearInterval(intervalId);
+  }, [fetchUsers]);
 
   const handleApprove = async (userId) => {
     try {

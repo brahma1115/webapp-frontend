@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRecentAlerts } from '../api';
 import './ViewAlerts.css';
@@ -11,17 +11,10 @@ const ViewAlerts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchAlerts();
-  }, [activeTab]);
-
-  const fetchAlerts = async () => {
+  const fetchAlerts = useCallback(async () => {
     setLoading(true);
     try {
-      // For now, map the activeTab to backend status if possible
-      // Assuming backend has status 'Active', 'Acknowledged', 'Escalated'
       const data = await getRecentAlerts(); 
-      // Filter locally for now if backend doesn't support direct status filtering yet
       const filtered = data.filter(a => {
         if (activeTab === 'Active') return a.status === 'Active';
         if (activeTab === 'History') return a.status === 'Acknowledged' || a.status === 'Resolved';
@@ -34,7 +27,11 @@ const ViewAlerts = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchAlerts();
+  }, [fetchAlerts]);
 
   return (
     <div className="active-alerts-container">
